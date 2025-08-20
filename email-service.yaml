@@ -1,0 +1,36 @@
+---
+# 6.1) Service for Email Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: fruits-email-service   # matches your gateway route lb://fruits-email-service
+spec:
+  selector:
+    app: fruits-email-service
+  ports:
+    - name: http
+      port: 8082                # your service’s port
+      targetPort: 8082
+  type: ClusterIP
+---
+# 6.2) Deployment for Email Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fruits-email-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fruits-email-service
+  template:
+    metadata:
+      labels:
+        app: fruits-email-service
+    spec:
+      containers:
+        - name: fruits-email-service
+          image: elu107/fruits-email-service:latest    # the image tag you built
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8082
