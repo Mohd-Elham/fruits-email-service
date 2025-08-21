@@ -1,0 +1,1 @@
+[![CI/CD Pipeline](https://github.com/Mohd-Elham/fruits-email-service/actions/workflows/main.yml/badge.svg)](https://github.com/Mohd-Elham/fruits-email-service/actions/workflows/main.yml)
