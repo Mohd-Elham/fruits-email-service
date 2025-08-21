@@ -72,5 +72,5 @@ jobs:
 
       - name: Update Deployment with new image
         run: |
-            kubectl set image deployment/fruits-service \
-              fruits-service=${{ secrets.DOCKER_USERNAME }}/fruits-service:${{ env.VERSION }}
+            kubectl set image deployment/fruits-email-service \
+              fruits-email-service=${{ secrets.DOCKER_USERNAME }}/fruits-email-service:${{ env.VERSION }}
