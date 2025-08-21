@@ -36,13 +36,20 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # 5. Build Docker image (multi-stage Dockerfile)
-      - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/fruits-email-service:latest .
+      # 5) Auto-increment version
+      - name: Bump version
+        id: version
+        run: |
+          VERSION=$(date +'%Y%m%d%H%M%S')
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-      # 6. Push Docker image
+      # 6. Build Docker image (multi-stage Dockerfile)
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/fruits-email-service:${{ env.VERSION }} .
+
+      # 7. Push Docker image
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/fruits-email-service:latest
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/fruits-email-service:${{ env.VERSION }}
 
       - name: Debug secrets
         run: |
@@ -62,3 +69,8 @@ jobs:
 
       - name: Deploy to AKS
         run: kubectl apply -f email-service.yaml
+
+      - name: Update Deployment with new image
+        run: |
+            kubectl set image deployment/fruits-service \
+              fruits-service=${{ secrets.DOCKER_USERNAME }}/fruits-service:${{ env.VERSION }}

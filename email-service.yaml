@@ -3,7 +3,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: fruits-email-service   # matches your gateway route lb://fruits-email-service
+  name: fruits-email-service # matches your gateway route lb://fruits-email-service
+  labels:
+    app: fruits-email-service
 spec:
   selector:
     app: fruits-email-service
